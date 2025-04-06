@@ -13,12 +13,12 @@ int subtrair (int num1, int num2){
 }
 
 int multiplicar(int num1, int num2){
-    int multiplicacao = num1*num2;
+    int multiplicacao = num1 * num2;
     return multiplicacao;
 
 }
 
-int dividir(int num1, int num2){
+float dividir(int num1, int num2){
     float divisao = num1/num2;
     return divisao;
 }
@@ -27,7 +27,7 @@ int menu(){
     int opcao;
     printf("Escolha uma opcao [1] soma [2] subtracao [3] multiplicacao [4]divisao");
     scanf("%d", &opcao);
-    
+    return opcao;
 }
 
 int main(){
@@ -45,7 +45,7 @@ int main(){
         printf("O resultado sera %d", resultado);
         break;
     case 2:
-        resultado = subtrair(a, b);
+        resultado = subtrair(a,b);
         printf("O resultado sera %d", resultado);
         break;
     case 3:
