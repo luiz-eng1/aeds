@@ -1,7 +1,10 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h> 
 
 int main() {
   int linhas, i, j, espacos;
+  
 
   // Solicita ao usuário o número de linhas da árvore
   printf("Digite o número de linhas da árvore: ");
@@ -28,3 +31,7 @@ int main() {
 
   return 0;
 }
+
+
+
+
