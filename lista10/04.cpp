@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 using namespace std;
 
 class Animal {
@@ -39,12 +40,14 @@ public:
 
 class Cachorro : public Animal {
 public:
+    //construtor
     Cachorro(string n, string m, float f, int i)
         : Animal(n, m, f, i) {}
 };
 
 class Gato : public Animal {
 public:
+    //construtor
     Gato(string n, string m, float f, int i)
         : Animal(n, m, f, i) {}
 };
@@ -81,8 +84,9 @@ public:
 int main() {
     Petshop loja;
     int opcao;
-
+try{ 
     do {
+        cout << "Selecione sua opção: " << endl;
         cout << "\n(1) Adicionar Cachorro (2) Adicionar Gato (3) Listar Todos (0) Sair: ";
         cin >> opcao;
         cin.ignore();
@@ -98,6 +102,10 @@ int main() {
                 cout << "Preço: "; cin >> preco;
                 cout << "Idade: "; cin >> idade;
                 cin.ignore();
+
+                if (preco < 0 || idade < 0)
+                        throw invalid_argument("Preço ou idade não pode ser negativo.");
+
                 loja.addCachorro(Cachorro(nome, raca, preco, idade));
                 break;
 
@@ -107,6 +115,10 @@ int main() {
                 cout << "Preço: "; cin >> preco;
                 cout << "Idade: "; cin >> idade;
                 cin.ignore();
+
+                if (preco < 0 || idade < 0)
+                        throw invalid_argument("Preço ou idade não pode ser negativo.");
+
                 loja.addGato(Gato(nome, raca, preco, idade));
                 break;
 
@@ -116,13 +128,18 @@ int main() {
                 break;
 
             case 0:
-                cout << "Encerrando programa." << endl;
+                cout << "Você saiu do sistema" << endl;
                 break;
 
             default:
-                cout << "Opção inválida!" << endl;
+                throw runtime_error("Opcao invalida");
         }
     } while (opcao != 0);
+ }
+ catch(const exception& e){
+    cout <<"Erro" << e.what() << endl;
+ }
+
 
     return 0;
 }

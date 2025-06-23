@@ -1,6 +1,18 @@
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 using namespace std;
+
+// Classe de exceção personalizada
+class EntradaInvalidaException : public exception {
+private:
+    string mensagem;
+public:
+    EntradaInvalidaException(const string& msg) : mensagem(msg) {}
+    const char* what() const noexcept override {
+        return mensagem.c_str();
+    }
+};
 
 class Cliente{
     private:
@@ -34,44 +46,51 @@ class Cliente{
 int main(){
     // numero de pessoas do vetor
     int  npessoas;
-    cout << "Digite o numero de pessoas que quer no vetor: " ;
-    cin >> npessoas;
-    cin.ignore();
-
-    vector<Cliente> clientes;
 
 
-    //usuario preenchendo o vetor
-    for(int i = 0; i < npessoas; i++){
-        string nome, endereco, dataNascimento;
-        int  telefone;
-
-        cout << "Digite o nome do " << i + 1 << " º cliente: " ;
-        getline(cin, nome);
-        
-        
-        cout << "Digite a Data de Nascimento do " << i + 1 << "º cliente: " ;
-        getline(cin, dataNascimento);
-        
-
-
-        cout << "Digite o endereço do " << i + 1 << "º cliente: " ;
-        getline(cin, endereco);
-
-
-        cout << "Digite o numero de telefone do " << i + 1 << "º cliente: " ;
-        cin >> telefone;    
+    try {
+        cout << "Digite o número de pessoas que quer no vetor: ";
+        cin >> npessoas;
         cin.ignore();
 
-        clientes.emplace_back(nome, dataNascimento, endereco, telefone);
+        if (npessoas <= 0) {
+            throw EntradaInvalidaException("Número de pessoas inválido. Deve ser maior que zero.");
+        }
+
+        vector<Cliente> clientes;
+
+        for (int i = 0; i < npessoas; i++) {
+            string nome, endereco, dataNascimento;
+            int telefone;
+
+            cout << "\n--- Cadastro do " << i + 1 << "º cliente ---\n";
+
+            cout << "Nome: ";
+            getline(cin, nome);
+
+            cout << "Data de Nascimento: ";
+            getline(cin, dataNascimento);
+
+            cout << "Endereço: ";
+            getline(cin, endereco);
+
+            cout << "Telefone: ";
+            cin >> telefone;
+            cin.ignore();
+
+            
+            clientes.emplace_back(nome, dataNascimento, endereco, telefone);
+        }
+
+        cout << "\n===== Lista de Clientes =====\n";
+        for (Cliente& c : clientes) {
+            c.exibirDados();
+        }
+
+    } catch (const EntradaInvalidaException& e) {
+        cerr << "\nErro: " << e.what() << endl;
+        return 1;
     }
-
-    //exibindo o vetor
-    for(int i = 0; i < npessoas; i++){
-        clientes[i].exibirDados();
-    }
-
-
 
     return 0;
 }

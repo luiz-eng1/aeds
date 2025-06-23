@@ -1,6 +1,17 @@
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 using namespace std;
+
+class ErroOperacao : public exception {
+    string mensagem;
+public:
+    ErroOperacao(const string& msg) : mensagem(msg) {}
+
+    const char* what() const noexcept override {
+        return mensagem.c_str();
+    }
+};
 
 class contaCorrente {
 protected: // é protected para conseguir acessar na classe derivada
@@ -22,10 +33,10 @@ public:
     virtual void sacar(float qtd) {
         cout << "Digite uma quantia que deseja sacar (Taxa de operação de 0,5% para saques): ";
         cin >> qtd;
-        float debito = qtd * 0.005 + qtd;
+        float debito = qtd * 0.05 + qtd;
         if (qtd > getSaldo()) {
-            cout << "Você não pode sacar uma quantia maior que seu saldo.\n";
-            return;
+            throw ErroOperacao("Erro: valor de saque inválido!");
+            
         }
         saldo -= debito;
         cout << "O saque foi efetuado com sucesso.\n";
@@ -48,10 +59,10 @@ public:
     void sacar(float qtd) override {
         cout << "Digite uma quantia que deseja sacar (Taxa de operação de 0,1% para saques): ";
         cin >> qtd;
-        float debito = qtd * 0.001 + qtd;
+        float debito = qtd * 0.01 + qtd;
         if (qtd > getSaldo()) {
-            cout << "Você não pode sacar uma quantia maior que seu saldo.\n";
-            return;
+            throw ErroOperacao("Erro: valor de saque inválido!");
+            
         }
         saldo -= debito;
         cout << "O saque foi efetuado com sucesso.\n";
@@ -59,51 +70,51 @@ public:
 };
 
 int main() {
-    float saldo, qtd;
+    float saldo;
     int escolha, operacao;
 
-    // saldo inicial
-    cout << "Informe o saldo inicial da conta: ";
-    cin >> saldo;
+    try {
+        cout << "Informe o saldo inicial da conta: ";
+        cin >> saldo;
 
-    // escolha da conta
-    cout << "Escolha o tipo da sua conta - (1) Conta normal  (2) Conta Especial: ";
-    cin >> escolha;
+        cout << "Escolha o tipo da sua conta - (1) Conta normal  (2) Conta Especial: ";
+        cin >> escolha;
 
-    contaCorrente* conta = nullptr;
+        contaCorrente* conta = nullptr;
+        switch (escolha) {
+            case 1:
+                conta = new contaCorrente(saldo);
+                break;
+            case 2:
+                conta = new contaEspecial(saldo);
+                break;
+            default:
+                throw ErroOperacao("Opção inválida de conta!");
+        }
 
-    switch (escolha) {
-        case 1:
-            conta = new contaCorrente(saldo);
-            break;
-        case 2:
-            conta = new contaEspecial(saldo); 
-            break;
-        default:
-            cout << "Opção inválida\n";
-            return 1;
+        cout << "Qual operação deseja realizar? (1) Depósito  (2) Saque  (3) Ver saldo: ";
+        cin >> operacao;
+
+        switch (operacao) {
+            case 1:
+                conta->depositar(0);
+                break;
+            case 2:
+                conta->sacar(0);
+                break;
+            case 3:
+                conta->mostrarSaldo();
+                break;
+            default:
+                throw ErroOperacao("Opção inválida de operação!");
+        }
+
+        conta->mostrarSaldo();
+        delete conta;
+    }
+    catch (const ErroOperacao& e) {
+        cout << "Exceção capturada: " << e.what() << endl;
     }
 
-    // operação
-    cout << "Qual operação deseja realizar? (1) Depósito  (2) Saque  (3) Ver saldo: ";
-    cin >> operacao;
-
-    switch (operacao) {
-        case 1:
-            conta->depositar(0); 
-            break;
-        case 2:
-            conta->sacar(0); 
-            break;
-        case 3:
-            conta->mostrarSaldo();
-            break;
-        default:
-            cout << "Opção inválida\n";
-            return 1;
-    }
-    conta -> mostrarSaldo();
-
-    delete conta; // libera memória
     return 0;
 }

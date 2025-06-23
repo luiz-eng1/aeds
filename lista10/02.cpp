@@ -1,6 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 using namespace std;
+
+// Classe de exceção
+class EntradaInvalida : public exception {
+public:
+    const char* what() const noexcept override {
+        return "Valor inválido informado!";
+    }
+};
 
 class Loja{
     private:
@@ -28,8 +37,6 @@ class Loja{
         return nomeProduto;
     }
 
-   
-
 };
 
 
@@ -42,63 +49,59 @@ int main(){
     // criação do vetor
     vector<Loja> produtos;
 
-    cout << "Qual o telefone da loja?";
-    cin >> telefone;
-    cin.ignore();
 
-    //usuario preenchendo o vetor
-
-    for(int i = 0; i < 10; i++){
-        cout << "Nome do produto " << i + 1 << ":";
-        getline(cin, nomeProduto);
-        
-        
-        cout << "Preço do produto " << i + 1 << ":";
-        cin >> precoProduto;
+   try {
+        cout << "Qual o telefone da loja? ";
+        cin >> telefone;
         cin.ignore();
 
-        produtos.emplace_back(telefone, nomeProduto, precoProduto);
+        for (int i = 0; i < 10; i++) {
+            cout << "Nome do produto " << i + 1 << ": ";
+            getline(cin, nomeProduto);
 
-    }
+            cout << "Preço do produto " << i + 1 << ": ";
+            cin >> precoProduto;
+            cin.ignore();
 
-    // menor valor
-    float menor = produtos[0].getPreco();
-    string nomeMenor = produtos[0].getNome();
-    for (int i = 0; i < 10; i++) {
-        if (produtos[i].getPreco() < menor) {
-            menor = produtos[i].getPreco();
-            nomeMenor = produtos[i].getNome();
+            
+            if (precoProduto < 0) throw EntradaInvalida();
+
+            produtos.emplace_back(telefone, nomeProduto, precoProduto);
         }
-    }
-    cout << "O menor valor é referente ao produto " << nomeMenor << " e seu valor é " << menor << endl;
 
-
-
-
-
-     // maior valor
-    float maior = produtos[0].getPreco();
-    string nomeMaior = produtos[0].getNome();
-    for (int i = 0; i < 10; i++) {
-        if (produtos[i].getPreco() > maior) {
-            maior = produtos[i].getPreco();
-            nomeMaior = produtos[i].getNome();
+        // Menor valor
+        float menor = produtos[0].getPreco();
+        string nomeMenor = produtos[0].getNome();
+        for (int i = 0; i < 10; i++) {
+            if (produtos[i].getPreco() < menor) {
+                menor = produtos[i].getPreco();
+                nomeMenor = produtos[i].getNome();
+            }
         }
+        cout << "O menor valor é referente ao produto " << nomeMenor << " e seu valor é " << menor << endl;
+
+        // Maior valor
+        float maior = produtos[0].getPreco();
+        string nomeMaior = produtos[0].getNome();
+        for (int i = 0; i < 10; i++) {
+            if (produtos[i].getPreco() > maior) {
+                maior = produtos[i].getPreco();
+                nomeMaior = produtos[i].getNome();
+            }
+        }
+        cout << "O maior valor é referente ao produto " << nomeMaior << " e seu valor é " << maior << endl;
+
+        // Média
+        float soma = 0;
+        for (int i = 0; i < 10; i++) {
+            soma += produtos[i].getPreco();
+        }
+        float media = soma / 10;
+        cout << "O valor médio dos produtos é " << media << endl;
     }
-    cout << "O maior valor é referente ao produto " << nomeMaior << " e seu valor é " << maior << endl;
-
-
-
-
-     // valor médio
-    float soma = 0;
-    for (int i = 0; i < 10; i++) {
-        soma += produtos[i].getPreco();
+    catch (const EntradaInvalida& e) {
+        cout << "Erro: " << e.what() << endl;
     }
-    float media = soma / 10;
-    cout << "O valor medio dos produtos é " << media << endl;
 
-
-
-   return 0; 
+    return 0;
 }
