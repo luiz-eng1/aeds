@@ -5,9 +5,10 @@ using namespace std;
 
 
 class Funcionario{
+    private:
     string nome;
     float salario;
-
+    public:
     //construtor
     Funcionario(string n, float i){
         nome = n;

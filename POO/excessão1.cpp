@@ -18,7 +18,7 @@ class Calculadora{
         b = m;
     }
 
-    void dividir(double a, double b){
+    void dividir(){
         if(b == 0){
             throw runtime_error("Divisão por zero não é permitida!");
         }
@@ -32,18 +32,18 @@ class Calculadora{
 int main(){
     double a,b;
 
-    cout<< "Digite o primeiro numero (A): " <<;
+    cout<< "Digite o primeiro numero (A): " ;
     cin >> a;
     
 
-    cout << "Digite o segundo numero (B): "<<;
+    cout << "Digite o segundo numero (B): ";
     cin >> b;
 
     Calculadora operacao(a,b);
 
-    try(
+    try{ 
         operacao.dividir();
-    )catch(runtime_error &e){
+    }catch(runtime_error &e){
         cout << "Erro capturado: " << e.what() << endl;
     }
 
