@@ -5,7 +5,7 @@ using namespace std;
 
 
 class Funcionario{
-    private:
+    protected:
     string nome;
     float salario;
     public:
