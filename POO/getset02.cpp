@@ -32,7 +32,7 @@ class ContaBancaria{
 
     void depositar(){
         double valor;
-        cout << "Diigte o valor que deseja depositar: ";
+        cout << "Digite o valor que deseja depositar: ";
         cin >> valor;
         saldo += valor;
 
