@@ -1,3 +1,4 @@
+#include <stdio.h>
 int main(){
     int INICIALmatriz[3][2];
     int transposta[2][3];

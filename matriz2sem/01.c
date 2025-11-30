@@ -1,3 +1,4 @@
+#include <stdio.h>
 int main(){
     int Pmatriz[3][3];
     int Smatriz[3][3];
